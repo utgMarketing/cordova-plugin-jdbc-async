@@ -1,0 +1,33 @@
+{
+  "name": "cordova-plugin-jdbc",
+  "version": "0.1.0",
+  "description": "Cordova Plugin for JDBC",
+  "cordova": {
+    "id": "cordova-plugin-jdbc",
+    "platforms": ["android"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arsmentis/cordova-plugin-jdbc.git"
+  },
+  "keywords": [
+    "cordova",
+    "jdbc",
+    "database",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "James Kruth",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/arsmentis/cordova-plugin-jdbc/issues"
+  },
+  "homepage": "https://github.com/arsmentis/cordova-plugin-jdbc#readme",
+  "engines": {
+    "cordovaDependencies": {
+      "0.1.0": {
+        "cordova-android": ">=5.1.1"
+      }
+    }
+  }
+}
