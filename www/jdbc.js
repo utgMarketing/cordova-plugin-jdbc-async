@@ -28,5 +28,9 @@ module.exports = {
 
   execute: function (sql, successCallback, errorCallback) {
     exec(successCallback, errorCallback, "Jdbc", "execute", [sql]);
+  },
+
+  isConnected: function (successCallback, errorCallback) {
+    exec(successCallback, errorCallback, "Jdbc", "isConnected", []);
   }
 }
