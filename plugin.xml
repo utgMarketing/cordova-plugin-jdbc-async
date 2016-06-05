@@ -12,8 +12,8 @@
     <clobbers target="jdbc" />
   </js-module>
   <platform name="android">
-    <config-file targer="res/xml/config.xml" parent="/*">
-      <feature name="Jdbc" >
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="Jdbc">
         <param name="android-package" value="com.arsmentis.cordova.jdbc.Jdbc"/>
       </feature>
     </config-file>
@@ -22,6 +22,6 @@
       <uses-permission android:name="android.permission.INTERNET" />
     </config-file>
     <source-file src="src/android/Jdbc.java"
-                 target="src/com/arsmentis/cordova/jdbc" />
+                 target-dir="src/com/arsmentis/cordova/jdbc" />
   </platform>
 </plugin>
