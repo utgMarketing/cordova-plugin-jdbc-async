@@ -54,7 +54,7 @@ If loading is successful, the `success` callback is triggered.
 
 ### `connect(url, user, password, success, error)`
 
-Uses a driver specific JDBC url, user name, and password to connect to your database, for example:
+Uses a driver specific JDBC url, user name, and password to connect to your database. For example:
 
 ```javascript
 jdbc.connect('jdbc:postgresql://10.0.2.2/mydb', 'testuser', 'securepassword', success, error);
