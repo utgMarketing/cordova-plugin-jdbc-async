@@ -6,7 +6,7 @@ This plugin allows you to execute simple queries against any database with a JDB
 
 Verify you've added the Android platform to your Cordova project using `cordova platform ls`. If Android isn't listed as installed, add it with `cordova platform add android --save`.
 
-Add the following hook to your `config.xml`:
+Add the following hook to your project's `config.xml`:
 
 ```xml
     <platform name="android">
@@ -36,9 +36,7 @@ module.exports = function(context) {
 };
 ```
 
-Make a `libs` folder in your project and add the driver JAR appropriate for your database. Add the plugin to your project with `cordova plugin add https://github.com/arsmentis/cordova-plugin-jdbc.git`
-
-Finally, build your project with the command `cordova build`. Verify your driver JAR was copied to `platforms/android/libs`.
+Make a `libs` folder in your project and add the driver JAR appropriate for your database. Add the plugin to your project with `cordova plugin add https://github.com/arsmentis/cordova-plugin-jdbc.git`. Finally, build your project with the command `cordova build`. Verify your driver JAR was copied to `platforms/android/libs`.
 
 ## Using the Plugin
 
@@ -86,8 +84,31 @@ Upon completion, the `success` callback is triggered with a boolean parameter se
 
 ### `execute(sql, success, error)`
 
-To be written.
+Execute arbitrary SQL against the connected database. For example:
 
-## Warning
+```javascript
+jdbc.execute('SELECT * FROM users', success, error)
+```
 
-Cordova apps are insecure, passwords, etc...
+Upon successful execution, the `success` callback will triggered with an array as its first parameter. If the statement produced results, each element of the array will contain an object with keys and values matching one row from the results. For example:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "james"
+    "last_login": "2016-05-22"
+  },
+  {
+    "id": 2,
+    "name": "george"
+    "last_login": "2016-06-01"
+  }
+]
+```
+
+## Warnings
+
+Cordova apps are generally not difficult to decompile. This means that your database host, name, user, and password could easily be exposed by a knowledgable person if your app is public. If you use this plugin to access sensitive data, it's very important you restrict the rights of the database user so they can only perform the bare minimum of tasks needed for the app to function. You should assume that curious, or perhaps malicious people may connect to your database without using your app. Secure your data accordingly.
+
+Additionally, the `execute` method has no protection against SQL injection. Be sure to sanitize your input appropriately for the underlying database.
