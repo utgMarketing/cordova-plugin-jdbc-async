@@ -42,7 +42,7 @@ Finally, build your project with the command `cordova build`. Verify your driver
 
 ## Using the Plugin
 
-Calls to this plugin live under `window.jdbc.` or just `jdbc.`. All `jdbc.` calls have a `success` and `error` callback as the final two function parameters. If the `error` callback is triggered, the sole parameter will be a string containing an error message.
+Calls to this plugin live under `window.jdbc` or just `jdbc`. All `jdbc` calls have a `success` and `error` callback as the final two function parameters. If the `error` callback is triggered, the sole parameter will be a string containing an error message.
 
 ### `load(driver, success, error)`
 
@@ -87,3 +87,7 @@ Upon completion, the `success` callback is triggered with a boolean parameter se
 ### `execute(sql, success, error)`
 
 To be written.
+
+## Warning
+
+Cordova apps are insecure, passwords, etc...
