@@ -30,6 +30,10 @@ module.exports = {
     exec(successCallback, errorCallback, "Jdbc", "execute", [sql]);
   },
 
+  load: function (driver, successCallback, errorCallback) {
+    exec(successCallback, errorCallback, "Jdbc", "load", [driver]);
+  },
+
   isConnected: function (successCallback, errorCallback) {
     exec(successCallback, errorCallback, "Jdbc", "isConnected", []);
   }

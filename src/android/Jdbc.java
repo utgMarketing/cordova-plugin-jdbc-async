@@ -75,6 +75,17 @@ public class Jdbc extends CordovaPlugin {
             }
 
             return true;
+        } else if ("load".equals(action)) {
+            String driver = args.getString(0);
+
+            try {
+                Class.forName(driver);
+                callbackContext.success();
+            } catch (ClassNotFoundException e) {
+                callbackContext.error(e.getMessage());
+            }
+
+            return true;
         } else if ("isConnected".equals(action)) {
             try {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isConnected()));
