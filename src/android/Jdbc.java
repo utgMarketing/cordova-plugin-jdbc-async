@@ -111,6 +111,7 @@ public class Jdbc extends CordovaPlugin {
     }
 
     private void connect(String url, String user, String password) throws SQLException {
+        disconnect();
         connection = DriverManager.getConnection(url, user, password);
     }
 
