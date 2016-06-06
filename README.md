@@ -96,12 +96,12 @@ Upon successful execution, the `success` callback will triggered with an array a
 [
   {
     "id": 1,
-    "name": "james"
+    "name": "james",
     "last_login": "2016-05-22"
   },
   {
     "id": 2,
-    "name": "george"
+    "name": "george",
     "last_login": "2016-06-01"
   }
 ]
