@@ -42,4 +42,48 @@ Finally, build your project with the command `cordova build`. Verify your driver
 
 ## Using the Plugin
 
-Coming soob.
+Calls to this plugin live under `window.jdbc.` or just `jdbc.`. All `jdbc.` calls have a `success` and `error` callback as the final two function parameters. If the `error` callback is triggered, the sole parameter will be a string containing an error message.
+
+### `load(driver, success, error)`
+
+Begin by loading your JDBC driver. Its documentation should reference the class name of the driver, which you'll pass as the first parameter. For instance, the PostgreSQL driver name is `org.postgresql.Driver`. You would load it like so:
+
+```javascript
+jdbc.load('org.postgresql.Driver', success, error);
+```
+
+If loading is successful, the `success` callback is triggered.
+
+### `connect(url, user, password, success, error)`
+
+Uses a driver specific JDBC url, user name, and password to connect to your database, for example:
+
+```javascript
+jdbc.connect('jdbc:postgresql://10.0.2.2/mydb', 'testuser', 'securepassword', success, error);
+```
+
+If the connection is successful, the `success` callback is triggered. Any existing connection is disconnected.
+
+### `disconnect(success, error)`
+
+Manually disconnect from the existing connection. Connections will be closed automatically when the app stops, but if you want to explicity close the connection, you can do so with the following code:
+
+```
+jdbc.disconnect(success, error);
+```
+
+Upon successful disconnection, the `success` callback is triggered.
+
+### `isConnected(success, error)`
+
+Test if the JDBC plugin is connected to a database. Useful if your app stops, then resumes and you need to reestablish a connection.
+
+```javascript
+jdbc.isConnected(success, error);
+```
+
+Upon completion, the `success` callback is triggered with a boolean parameter set to true if the plugin is connected, and false otherwise.
+
+### `execute(sql, success, error)`
+
+To be written.
