@@ -133,7 +133,7 @@ public class Jdbc extends CordovaPlugin {
         while (resultSet.next()) {
             JSONObject row = new JSONObject();
 
-            for (int i = 0; i < columns.getColumnCount(); i++) {
+            for (int i = 1; i <= columns.getColumnCount(); i++) {
                 row.put(columns.getColumnName(i), resultSet.getObject(i));
             }
             results.put(row);
