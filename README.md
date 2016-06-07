@@ -36,7 +36,7 @@ module.exports = function(context) {
 };
 ```
 
-Make a `libs` folder in your project and add the driver JAR appropriate for your database. Add the plugin to your project with `cordova plugin add https://github.com/arsmentis/cordova-plugin-jdbc.git`. Finally, build your project with the command `cordova build`. Verify your driver JAR was copied to `platforms/android/libs`.
+Make a `libs` folder in your project and add the driver JAR appropriate for your database. Add the plugin to your project with `cordova plugin add cordova-plugin-jdbc`. Finally, build your project with the command `cordova build`. Verify your driver JAR was copied to `platforms/android/libs`.
 
 ## Using the Plugin
 
