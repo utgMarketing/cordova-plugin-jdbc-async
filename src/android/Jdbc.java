@@ -49,7 +49,7 @@ public class Jdbc extends CordovaPlugin {
                 connect(url, user, password);
                 callbackContext.success();
             } catch (SQLException e) {
-                callbackContext.error(e.getMessage());
+                callbackContext.error(e.toString());
             }
 
             return true;
@@ -58,7 +58,7 @@ public class Jdbc extends CordovaPlugin {
                 disconnect();
                 callbackContext.success();
             } catch (SQLException e) {
-                callbackContext.error(e.getMessage());
+                callbackContext.error(e.toString());
             }
 
             return true;
@@ -69,9 +69,9 @@ public class Jdbc extends CordovaPlugin {
                 JSONArray results = execute(sql);
                 callbackContext.success(results);
             } catch (SQLException e) {
-                callbackContext.error(e.getMessage());
+                callbackContext.error(e.toString());
             } catch (JSONException e) {
-                callbackContext.error(e.getMessage());
+                callbackContext.error(e.toString());
             }
 
             return true;
@@ -82,7 +82,7 @@ public class Jdbc extends CordovaPlugin {
                 Class.forName(driver);
                 callbackContext.success();
             } catch (ClassNotFoundException e) {
-                callbackContext.error(e.getMessage());
+                callbackContext.error(e.toString());
             }
 
             return true;
@@ -90,7 +90,7 @@ public class Jdbc extends CordovaPlugin {
             try {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isConnected()));
             } catch (SQLException e) {
-                callbackContext.error(e.getMessage());
+                callbackContext.error(e.toString());
             }
 
             return true;
