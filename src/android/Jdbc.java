@@ -128,19 +128,23 @@ public class Jdbc extends CordovaPlugin {
 
         JSONArray results = new JSONArray();
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData columns = resultSet.getMetaData();
 
-        while (resultSet.next()) {
-            JSONObject row = new JSONObject();
+        if (statement.execute(sql)) {
+            ResultSet resultSet = statement.getResultSet();
+            ResultSetMetaData columns = resultSet.getMetaData();
 
-            for (int i = 1; i <= columns.getColumnCount(); i++) {
-                row.put(columns.getColumnName(i), resultSet.getObject(i));
+            while (resultSet.next()) {
+                JSONObject row = new JSONObject();
+
+                for (int i = 1; i <= columns.getColumnCount(); i++) {
+                    row.put(columns.getColumnName(i), resultSet.getObject(i));
+                }
+                results.put(row);
             }
-            results.put(row);
+
+            resultSet.close();
         }
 
-        resultSet.close();
         statement.close();
 
         return results;
