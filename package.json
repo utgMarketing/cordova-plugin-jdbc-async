@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-jdbc",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cordova Plugin for JDBC",
   "cordova": {
     "id": "cordova-plugin-jdbc",
