@@ -33,13 +33,102 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.CompletableFuture;
+
+
 public class Jdbc extends CordovaPlugin {
     private static final String TAG = "Jdbc";
 
     private Connection connection;
 
-    @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+
+
+    
+@Override
+public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    if ("connect".equals(action)) {
+        String url = args.getString(0);
+        String user = args.getString(1);
+        String password = args.getString(2);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                connect(url, user, password);
+                callbackContext.success();
+            } catch (SQLException e) {
+                callbackContext.error(e.toString());
+            }
+        });
+
+        return true;
+    } else if ("disconnect".equals(action)) {
+        CompletableFuture.runAsync(() -> {
+            try {
+                disconnect();
+                callbackContext.success();
+            } catch (SQLException e) {
+                callbackContext.error(e.toString());
+            }
+        });
+
+        return true;
+    } else if ("execute".equals(action)) {
+        String sql = args.getString(0);
+
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                JSONArray results = execute(sql);
+                return results;
+            } catch (SQLException e) {
+                callbackContext.error(e.toString());
+            } catch (JSONException e) {
+                callbackContext.error(e.toString());
+            }
+
+            return null;
+        }).thenAcceptAsync(results -> {
+            if (results != null) {
+                callbackContext.success(results);
+            }
+        });
+
+        return true;
+    } else if ("load".equals(action)) {
+        String driver = args.getString(0);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                Class.forName(driver);
+                callbackContext.success();
+            } catch (ClassNotFoundException e) {
+                callbackContext.error(e.toString());
+            }
+        });
+
+        return true;
+    } else if ("isConnected".equals(action)) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                return isConnected();
+            } catch (SQLException e) {
+                callbackContext.error(e.toString());
+            }
+
+            return false;
+        }).thenAcceptAsync(isConnected -> {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isConnected));
+        });
+
+        return true;
+    }
+
+    return false;
+}
+
+    
+    
+
+    public boolean execute2(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if ("connect".equals(action)) {
             String url = args.getString(0);
             String user = args.getString(1);
