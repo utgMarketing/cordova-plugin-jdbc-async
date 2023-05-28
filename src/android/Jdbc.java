@@ -28,103 +28,110 @@ import android.util.Log;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
+import org.apache.cordova.CordovaInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.concurrent.CompletableFuture;
 
 
 public class Jdbc extends CordovaPlugin {
     private static final String TAG = "Jdbc";
 
     private Connection connection;
-
-
-
     
-@Override
-public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-    if ("connect".equals(action)) {
-        String url = args.getString(0);
-        String user = args.getString(1);
-        String password = args.getString(2);
+    
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        CordovaInterface cordova = this.cordova;
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if ("connect".equals(action)) {
+                        String url = args.getString(0);
+                        String user = args.getString(1);
+                        String password = args.getString(2);
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                connect(url, user, password);
-                callbackContext.success();
-            } catch (SQLException e) {
-                callbackContext.error(e.toString());
+                        connect(url, user, password);
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callbackContext.success();
+                            }
+                        });
+                    } else if ("disconnect".equals(action)) {
+                        disconnect();
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callbackContext.success();
+                            }
+                        });
+                    } else if ("execute".equals(action)) {
+                        String sql = args.getString(0);
+
+                        JSONArray results = execute(sql);
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callbackContext.success(results);
+                            }
+                        });
+                    } else if ("load".equals(action)) {
+                        String driver = args.getString(0);
+
+                        Class.forName(driver);
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callbackContext.success();
+                            }
+                        });
+                    } else if ("isConnected".equals(action)) {
+                        boolean isConnected = isConnected();
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PluginResult result = new PluginResult(PluginResult.Status.OK, isConnected);
+                                callbackContext.sendPluginResult(result);
+                            }
+                        });
+                    } else {
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callbackContext.error("Invalid action");
+                            }
+                        });
+                    }
+                } catch (SQLException e) {
+                    cordova.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callbackContext.error(e.toString());
+                        }
+                    });
+                } catch (JSONException e) {
+                    cordova.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callbackContext.error(e.toString());
+                        }
+                    });
+                } catch (ClassNotFoundException e) {
+                    cordova.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callbackContext.error(e.toString());
+                        }
+                    });
+                }
             }
-        });
-
-        return true;
-    } else if ("disconnect".equals(action)) {
-        CompletableFuture.runAsync(() -> {
-            try {
-                disconnect();
-                callbackContext.success();
-            } catch (SQLException e) {
-                callbackContext.error(e.toString());
-            }
-        });
-
-        return true;
-    } else if ("execute".equals(action)) {
-        String sql = args.getString(0);
-
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                JSONArray results = execute(sql);
-                return results;
-            } catch (SQLException e) {
-                callbackContext.error(e.toString());
-            } catch (JSONException e) {
-                callbackContext.error(e.toString());
-            }
-
-            return null;
-        }).thenAcceptAsync(results -> {
-            if (results != null) {
-                callbackContext.success(results);
-            }
-        });
-
-        return true;
-    } else if ("load".equals(action)) {
-        String driver = args.getString(0);
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                Class.forName(driver);
-                callbackContext.success();
-            } catch (ClassNotFoundException e) {
-                callbackContext.error(e.toString());
-            }
-        });
-
-        return true;
-    } else if ("isConnected".equals(action)) {
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                return isConnected();
-            } catch (SQLException e) {
-                callbackContext.error(e.toString());
-            }
-
-            return false;
-        }).thenAcceptAsync(isConnected -> {
-            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isConnected));
         });
 
         return true;
     }
-
-    return false;
-}
-
     
     
 
